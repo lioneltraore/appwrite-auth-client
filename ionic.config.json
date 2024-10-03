@@ -1,0 +1,7 @@
+{
+  "name": "appwrite-auth-demo-client",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
