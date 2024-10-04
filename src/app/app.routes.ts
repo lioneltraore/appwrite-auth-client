@@ -8,7 +8,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
+    loadChildren: () => import('./layout/tabs/tabs.routes').then((m) => m.routes),
   },
   {
     path: 'login',
