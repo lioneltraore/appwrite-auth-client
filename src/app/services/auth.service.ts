@@ -22,7 +22,10 @@ export class AuthService {
 
   login(email: string, password: string): Observable<User> {
     // make http request to login endpoint
-    return of({ email, password }).pipe(
+
+    const user: User = { email, password };
+
+    return of(user).pipe(
       tap(user => this.userSubject.next(user)),
       shareReplay()
     );

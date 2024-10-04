@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   IonContent,
   IonHeader,
@@ -10,7 +10,11 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
-  IonCardContent, IonButton, IonList, IonItem, IonInput, IonInputPasswordToggle } from '@ionic/angular/standalone';
+  IonCardContent, IonButton, IonList, IonItem, IonInput } from '@ionic/angular/standalone';
+import { User } from 'src/app/models/user';
+import { FeedbackService } from 'src/app/services/feedback.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +27,6 @@ import {
     IonCardSubtitle,
     IonCardHeader,
     IonCard,
-    IonInputPasswordToggle,
     IonContent,
     IonHeader,
     IonTitle,
@@ -36,6 +39,9 @@ import {
 export class LoginPage implements OnInit {
 
   fb = inject(FormBuilder);
+  feedbackService = inject(FeedbackService);
+  authService = inject(AuthService);
+  router = inject(Router);
 
   form = this.fb.group({
     email: ['foo@mail.com', [Validators.required]],
@@ -50,5 +56,11 @@ export class LoginPage implements OnInit {
 
   login(): void {
     console.log(`[Login Method] form data = ${JSON.stringify(this.form.getRawValue())}`);
+    const user: User = this.form.getRawValue() as User;
+
+    this.authService.login(user.email, user.password).subscribe({
+      next: () => user.password === 'foo' ? this.router.navigateByUrl('/') : this.feedbackService.presentToast('Login error', 'top', 'danger'),
+      error: () => this.feedbackService.presentToast('Login error', 'top', 'danger')
+    })
   }
 }
