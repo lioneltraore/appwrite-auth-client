@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  appwriteUrl: 'https://med-tracker.eskahen.com/v1',
+  appwriteProjectID: '66ff1cf60028a651a638'
 };
 
 /*
