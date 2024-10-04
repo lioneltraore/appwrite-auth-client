@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   IonContent,
   IonHeader,
@@ -30,12 +30,25 @@ import {
     IonToolbar,
     CommonModule,
     FormsModule,
+    ReactiveFormsModule
   ],
 })
 export class LoginPage implements OnInit {
+
+  fb = inject(FormBuilder);
+
+  form = this.fb.group({
+    email: ['foo@mail.com', [Validators.required]],
+    password: ['foo', [Validators.required]]
+  });
+
   constructor() {}
 
   ngOnInit() {
     console.log('[NgOnInit Method] Init Success');
+  }
+
+  login(): void {
+    console.log(`[Login Method] form data = ${JSON.stringify(this.form.getRawValue())}`);
   }
 }
