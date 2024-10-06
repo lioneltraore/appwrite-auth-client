@@ -3,7 +3,7 @@ import { BehaviorSubject, map, Observable, of, shareReplay, tap } from 'rxjs';
 import { User } from '../models/user';
 import { HttpClient } from '@angular/common/http';
 
-const AUTH_DATA = 'authData';
+export const AUTH_DATA = 'authData';
 
 @Injectable({
   providedIn: 'root'
