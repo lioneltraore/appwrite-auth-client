@@ -22,12 +22,12 @@ export class AppwriteService {
   }
 
   async createAccount(email: string, password: string) {
-    const newUser = await this.account.create(ID.unique(), email, password);
+    await this.account.create(ID.unique(), email, password);
   }
 
   async authenticate(email: string, password: string) {
     await this.account.createEmailPasswordSession(email, password);
-    return this.account.get();
+    return await this.account.get();
   }
 
   async closeSession() {
