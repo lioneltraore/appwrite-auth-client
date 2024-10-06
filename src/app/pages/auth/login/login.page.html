@@ -1,3 +1,9 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="secondary">
+    <ion-title>Connection</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content class="ion-padding" [fullscreen]="true">
   <ion-card class="ion-padding card">
     <ion-card-header>
@@ -32,4 +38,7 @@
 
     <ion-button (click)="login()" color="secondary" class="ion-margin-top" expand="block">Login</ion-button>
   </ion-card>
+  <div class="ion-text-center">
+    <ion-button [routerLink]="['/register']" routerLinkActive="router-link-active"  color="secondary" fill="clear">Register</ion-button>
+  </div>
 </ion-content>

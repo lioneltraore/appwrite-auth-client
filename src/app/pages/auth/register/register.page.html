@@ -1,13 +1,76 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start" >
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title>register</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding" [fullscreen]="true">
+
+  <ion-card class="ion-padding card">
+    <ion-card-header>
+      <ion-card-title>Create Account</ion-card-title>
+      <ion-card-subtitle>Enter your informations</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content class="ion-no-padding ion-margin-bottom">
+      <form [formGroup]="registerForm">
+        <ion-list>
+          <ion-item>
+            <ion-input
+            color="secondary"
+              label="First name"
+              labelPlacement="floating"
+              placeholder="First name"
+              formControlName="firstname"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+            color="secondary"
+              label="Last name"
+              labelPlacement="floating"
+              placeholder="Last name"
+              formControlName="lastname"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+            color="secondary"
+              label="Email"
+              labelPlacement="floating"
+              placeholder="Email"
+              formControlName="email"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+            color="secondary"
+              type="password"
+              label="Password"
+              labelPlacement="floating"
+              placeholder="Password"
+              formControlName="password"
+            >
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+            color="secondary"
+              type="password"
+              label="Confirm password"
+              labelPlacement="floating"
+              placeholder="Confirm password"
+              formControlName="passwordConfirm"
+            >
+            </ion-input>
+          </ion-item>
+        </ion-list>
+      </form>
+    </ion-card-content>
+
+    <ion-button (click)="register()" color="secondary" class="ion-margin-top" expand="block">Register</ion-button>
+  </ion-card>
 </ion-content>

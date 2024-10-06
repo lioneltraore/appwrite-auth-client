@@ -10,18 +10,18 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
-  IonCardContent, IonButton, IonList, IonItem, IonInput } from '@ionic/angular/standalone';
+  IonCardContent, IonButton, IonList, IonItem, IonInput, IonButtons, IonBackButton } from '@ionic/angular/standalone';
 import { User } from 'src/app/models/user';
 import { FeedbackService } from 'src/app/services/feedback.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonInput, IonItem, IonList, IonButton,
+  imports: [IonBackButton, IonButtons, IonInput, IonItem, IonList, IonButton,
     IonCardContent,
     IonCardTitle,
     IonCardSubtitle,
@@ -33,7 +33,8 @@ import { Router } from '@angular/router';
     IonToolbar,
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
 })
 export class LoginPage implements OnInit {
