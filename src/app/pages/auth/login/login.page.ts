@@ -10,7 +10,7 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
-  IonCardContent, IonButton, IonList, IonItem, IonInput, IonButtons, IonBackButton } from '@ionic/angular/standalone';
+  IonCardContent, IonButton, IonList, IonItem, IonInput, IonButtons, IonBackButton, IonSpinner } from '@ionic/angular/standalone';
 import { User } from 'src/app/models/user';
 import { FeedbackService } from 'src/app/services/feedback.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -21,7 +21,7 @@ import { Router, RouterLink } from '@angular/router';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonBackButton, IonButtons, IonInput, IonItem, IonList, IonButton,
+  imports: [IonSpinner, IonBackButton, IonButtons, IonInput, IonItem, IonList, IonButton,
     IonCardContent,
     IonCardTitle,
     IonCardSubtitle,
@@ -44,6 +44,8 @@ export class LoginPage implements OnInit {
   authService = inject(AuthService);
   router = inject(Router);
 
+  isLoading = false;
+
   form = this.fb.group({
     email: ['foo@mail.com', [Validators.required]],
     password: ['foo', [Validators.required]]
@@ -58,10 +60,17 @@ export class LoginPage implements OnInit {
   login(): void {
     console.log(`[Login Method] form data = ${JSON.stringify(this.form.getRawValue())}`);
     const user: User = this.form.getRawValue() as User;
-
+    this.isLoading = true;
     this.authService.login(user.email, user.password).subscribe({
-      next: () => user.password === 'foo' ? this.router.navigateByUrl('/') : this.feedbackService.presentToast('Login error', 'top', 'danger'),
-      error: () => this.feedbackService.presentToast('Login error', 'top', 'danger')
+      next: (response) => {
+        this.isLoading = false;
+        console.log(response);
+        this.router.navigateByUrl('/');
+      },
+      error: (res) => {
+        this.isLoading = false;
+        this.feedbackService.presentToast(res.message || 'Login error', 'top', 'danger');
+      }
     })
   }
 }

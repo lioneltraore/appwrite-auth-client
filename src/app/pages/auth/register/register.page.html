@@ -71,6 +71,9 @@
       </form>
     </ion-card-content>
 
-    <ion-button (click)="register()" color="secondary" class="ion-margin-top" expand="block">Register</ion-button>
+    <ion-button (click)="register()" color="secondary" class="ion-margin-top" expand="block">
+      <span *ngIf="!isLoading">Register</span>
+      <ion-spinner *ngIf="isLoading"></ion-spinner>
+    </ion-button>
   </ion-card>
 </ion-content>

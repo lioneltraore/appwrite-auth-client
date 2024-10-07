@@ -1,7 +1,10 @@
+// import { User } from 'src/app/models/user';
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, of, shareReplay, tap } from 'rxjs';
-import { User } from '../models/user';
+import { BehaviorSubject, from, map, Observable, of, shareReplay, tap } from 'rxjs';
+// import { User } from '../models/user';
 import { HttpClient } from '@angular/common/http';
+import { AppwriteService } from './appwrite.service';
+import { Models } from 'appwrite';
 
 export const AUTH_DATA = 'authData';
 
@@ -10,12 +13,13 @@ export const AUTH_DATA = 'authData';
 })
 export class AuthService {
 
-  private userSubject = new BehaviorSubject<User|undefined>(undefined);
+  private userSubject = new BehaviorSubject<Models.User<Models.Preferences>|undefined>(undefined);
   user$ = this.userSubject.asObservable();
   isLoggedIn$!: Observable<boolean>;
   isLoggedOut$!: Observable<boolean>;
 
   http = inject(HttpClient);
+  appwriteService = inject(AppwriteService);
 
   constructor() {
     this.isLoggedIn$ = this.user$.pipe(map(user => !!user));
@@ -27,12 +31,14 @@ export class AuthService {
     }
   }
 
-  login(email: string, password: string): Observable<User> {
-    // make http request to login endpoint
+  register(email: string, password: string) {
+    return from(this.appwriteService.createAccount(email, password)).pipe(
+      shareReplay()
+    );
+  }
 
-    const user: User = { email, password };
-
-    return of(user).pipe(
+  login(email: string, password: string): Observable<Models.User<Models.Preferences>> {
+    return from(this.appwriteService.authenticate(email, password)).pipe(
       tap(user => {
         this.userSubject.next(user);
         localStorage.setItem(AUTH_DATA, JSON.stringify(user));
@@ -44,5 +50,6 @@ export class AuthService {
   logout() {
     this.userSubject.next(undefined);
     localStorage.removeItem(AUTH_DATA);
+    this.appwriteService.closeSession();
   }
 }

@@ -10,12 +10,12 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
-  IonCardContent, IonButton, IonList, IonItem, IonInput, IonButtons, IonBackButton, IonLabel } from '@ionic/angular/standalone';
-import { User } from 'src/app/models/user';
+  IonCardContent, IonButton, IonList, IonItem, IonInput, IonButtons, IonBackButton, IonLabel, IonSpinner } from '@ionic/angular/standalone';
 import { FeedbackService } from 'src/app/services/feedback.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { matchPassword } from './match-password.validator';
+import { CreateUser } from 'src/app/models/create-user.model';
 
 
 @Component({
@@ -23,7 +23,7 @@ import { matchPassword } from './match-password.validator';
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
   standalone: true,
-  imports: [IonBackButton, IonButtons, IonInput, IonItem, IonList, IonButton,
+  imports: [IonSpinner, IonBackButton, IonButtons, IonInput, IonItem, IonList, IonButton,
     IonCardContent,
     IonCardTitle,
     IonCardSubtitle,
@@ -44,6 +44,7 @@ export class RegisterPage implements OnInit {
   feedbackService = inject(FeedbackService);
   authService = inject(AuthService);
   router = inject(Router);
+  isLoading = false;
 
   registerForm = this.fb.group({
     firstname: ['', [Validators.required, Validators.minLength(3)]],
@@ -64,12 +65,27 @@ export class RegisterPage implements OnInit {
   }
 
   register(): void {
-    console.log(`[Register Method] form data = ${JSON.stringify(this.registerForm.getRawValue())}`);
-    // const user: User = this.form.getRawValue() as User;
 
-    // this.authService.login(user.email, user.password).subscribe({
-    //   next: () => user.password === 'foo' ? this.router.navigateByUrl('/') : this.feedbackService.presentToast('Login error', 'top', 'danger'),
-    //   error: () => this.feedbackService.presentToast('Login error', 'top', 'danger')
-    // })
+    console.log('[Register Method] form :: ', this.registerForm);
+    const userData: CreateUser = this.registerForm.getRawValue() as CreateUser;
+    console.log(`[Register Method] userData = ${JSON.stringify(userData)}`);
+
+    if(!this.registerForm.valid) {
+      this.feedbackService.presentToast('Form invalid', 'top', 'danger');
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.authService.register(userData.email, userData.password).subscribe({
+      next: (res) => {
+        this.isLoading = false;
+        console.log('rsponse:: ', res);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.feedbackService.presentToast(err.message || 'Registration error', 'top', 'danger');
+      }
+    })
   }
 }
